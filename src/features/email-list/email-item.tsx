@@ -11,12 +11,19 @@ export const EmailItem = ({
   currentSelected: Email[];
   setCurrentSelected: Dispatch<SetStateAction<Email[]>>;
 }) => {
-  const [checked, setChecked] = useState(
-    !!currentSelected.find((c) => c.id === email.id) || false
-  );
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    setChecked(!!currentSelected.find((c) => c.id === email.id));
+    setCurrentSelected((prev) => {
+      if (checked) {
+        const exists = prev.find((p) => p.id === email.id);
+        if (!exists) {
+          return [...prev, email];
+        }
+      }
+
+      return prev;
+    });
   }, [setCurrentSelected, checked, currentSelected, email]);
   return (
     <div
