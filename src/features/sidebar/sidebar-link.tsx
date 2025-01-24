@@ -1,13 +1,14 @@
 "use client";
+import { EmailContext } from "@/contexts/email-context";
 import Image from "next/image";
 import Link from "next/link";
 
 import { usePathname } from "next/navigation";
+import { useContext } from "react";
 
 interface SidebarLinkProps {
   iconSrc: string;
   title: string;
-  amount?: string;
   url: string;
   width: number;
   height: number;
@@ -16,11 +17,11 @@ interface SidebarLinkProps {
 export const SidebarLink = ({
   iconSrc,
   title,
-  amount,
   url,
   width,
   height,
 }: SidebarLinkProps) => {
+  const { emailData } = useContext(EmailContext);
   const path = usePathname();
   return (
     <Link
@@ -40,10 +41,20 @@ export const SidebarLink = ({
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          width: "100%",
         }}
       >
         <p>{title}</p>
-        {amount && <p>{amount}</p>}
+        {emailData && url !== "/#logout" && (
+          <p>
+            {
+              emailData.filter(
+                (email) =>
+                  email.folder.toLowerCase() === url.slice(1).toLowerCase()
+              ).length
+            }
+          </p>
+        )}
       </div>
     </Link>
   );

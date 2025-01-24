@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 
 type pathnames = "/inbox" | "/archive";
 
-const mapLinkToTitle = {
+export const mapLinkToTitle = {
   "/inbox": "Inbox",
   "/archive": "Archive",
 };

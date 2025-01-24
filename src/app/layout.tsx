@@ -35,14 +35,15 @@ export default function RootLayout({
           position: "relative",
         }}
       >
-        <Sidebar />
-        <div>
-          <PageTitle />
-          <EmailContextProvider>
+        <EmailContextProvider>
+          <Sidebar />
+          <div>
+            <PageTitle />
+
             <div>{children}</div>
             <Modal />
-          </EmailContextProvider>
-        </div>
+          </div>
+        </EmailContextProvider>
       </body>
     </html>
   );

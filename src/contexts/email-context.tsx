@@ -6,8 +6,8 @@ import { createContext, Dispatch, SetStateAction, useState } from "react";
 interface EmailContext {
   emailData?: Email[];
   setEmailData?: Dispatch<SetStateAction<Email[]>>;
-  selectedEmail?: Email;
-  setSelectedEmail?: Dispatch<SetStateAction<Email | undefined>>;
+  selectedEmail?: Email | null;
+  setSelectedEmail?: Dispatch<SetStateAction<Email | null | undefined>>;
 }
 
 export const EmailContext = createContext<EmailContext>({});
@@ -18,7 +18,7 @@ export const EmailContextProvider = ({
   children: React.ReactNode;
 }>) => {
   const [emailData, setEmailData] = useState(db);
-  const [selectedEmail, setSelectedEmail] = useState<Email>();
+  const [selectedEmail, setSelectedEmail] = useState<Email | null>();
   return (
     <EmailContext.Provider
       value={{ emailData, setEmailData, selectedEmail, setSelectedEmail }}

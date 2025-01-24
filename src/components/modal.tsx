@@ -1,10 +1,18 @@
 "use client";
 import { EmailContext } from "@/contexts/email-context";
+import { useChangeFolder } from "@/hooks/use-change-folder";
+import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
 
 export const Modal = () => {
-  const { selectedEmail } = useContext(EmailContext);
+  const { selectedEmail, setSelectedEmail } = useContext(EmailContext);
   const [isOpen, setIsOpen] = useState(!!selectedEmail);
+  const changeDestination = useChangeFolder();
+
+  const closeModal = () => {
+    setIsOpen(false);
+    setSelectedEmail!(null);
+  };
 
   useEffect(() => {
     setIsOpen(!!selectedEmail);
@@ -22,9 +30,7 @@ export const Modal = () => {
       }}
     >
       <div
-        onClick={() => {
-          setIsOpen(false);
-        }}
+        onClick={closeModal}
         style={{
           width: "30vw",
           height: "100vh",
@@ -46,9 +52,21 @@ export const Modal = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            color: "#4B5563",
+            fontWeight: 500,
           }}
         >
-          <div>Cancel</div>
+          <div
+            onClick={closeModal}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+            }}
+          >
+            <Image src="/close.svg" width={11} height={11} alt="Cancel Icon" />
+            <p>Close (Esc)</p>
+          </div>
           <div
             style={{
               display: "flex",
@@ -56,8 +74,37 @@ export const Modal = () => {
               gap: "40px",
             }}
           >
-            <div>Mark as Read</div>
-            <div>Archive</div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+              }}
+            >
+              <Image
+                src="/message.svg"
+                width={19}
+                height={18}
+                alt="Message Icon"
+              />
+              <p>Mark as read(r)</p>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+              }}
+              onClick={() =>
+                changeDestination({
+                  emails: [selectedEmail!],
+                  destination: "archive",
+                })
+              }
+            >
+              <Image src="/trash.svg" width={17} height={19} alt="Trash Icon" />
+              <p>Archive (a)</p>
+            </div>
           </div>
         </div>
         <div

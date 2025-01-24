@@ -6,7 +6,7 @@ import { EmailItem } from "./email-item";
 import { EmailFolder } from "@/types/email.type";
 
 export const EmailList = ({ folder }: { folder: EmailFolder }) => {
-  const { emailData } = useContext(EmailContext);
+  const { emailData, setSelectedEmail } = useContext(EmailContext);
   return (
     <div
       style={{
@@ -24,6 +24,9 @@ export const EmailList = ({ folder }: { folder: EmailFolder }) => {
           ?.filter((email) => email.folder === folder)
           .map((email) => (
             <li
+              onClick={() =>
+                setSelectedEmail!(JSON.parse(JSON.stringify(email)))
+              }
               style={{
                 listStyleType: "none",
                 padding: "20px 24px 20px 24px",
