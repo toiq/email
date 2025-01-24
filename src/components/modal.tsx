@@ -95,7 +95,7 @@ export const Modal = () => {
                 height={18}
                 alt="Message Icon"
               />
-              <p>Mark as read(r)</p>
+              <p>Mark as {selectedEmail?.isRead ? "unread(m)" : "read(r)"}</p>
             </div>
             <div
               style={{
