@@ -1,19 +1,124 @@
 "use client";
 
 import { EmailContext } from "@/contexts/email-context";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { EmailItem } from "./email-item";
-import { EmailFolder } from "@/types/email.type";
+import { Email, EmailFolder } from "@/types/email.type";
+import { useChangeFolder } from "@/hooks/use-change-folder";
+import { useChangeRead } from "@/hooks/use-change-read";
+import Image from "next/image";
 
 export const EmailList = ({ folder }: { folder: EmailFolder }) => {
   const { emailData, setSelectedEmail } = useContext(EmailContext);
+  const [checked, setChecked] = useState(false);
+  const [currentSelected, setCurrentSelected] = useState<Email[]>([]);
+  const changeDestination = useChangeFolder();
+  const changeStatus = useChangeRead();
+
+  useEffect(() => {
+    if (checked) {
+      setCurrentSelected(emailData!.filter((email) => email.folder === folder));
+    } else {
+      setCurrentSelected([]);
+    }
+  }, [setCurrentSelected, emailData, folder, checked]);
+
   return (
     <div
       style={{
-        width: "100%",
-        flexGrow: 1,
+        width: "calc(100vw - 260px)",
       }}
     >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "20px",
+          padding: "20px 24px 20px 24px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "20px",
+          }}
+        >
+          <input
+            type="checkbox"
+            name="Email Item"
+            checked={checked}
+            onChange={() => {
+              setChecked((prev) => !prev);
+            }}
+          />
+          <p
+            style={{
+              fontWeight: 500,
+            }}
+          >
+            Email Selected ({currentSelected?.length})
+          </p>
+        </div>
+
+        {currentSelected?.length !== 0 && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "40px",
+            }}
+          >
+            <div
+              onClick={() =>
+                changeStatus({
+                  emails: currentSelected,
+                  status: !currentSelected[0]!.isRead,
+                })
+              }
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+              }}
+            >
+              <Image
+                src="/message.svg"
+                width={19}
+                height={18}
+                alt="Message Icon"
+              />
+              <p>
+                Mark as {currentSelected[0]?.isRead ? "unread(m)" : "read(r)"}
+              </p>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+              }}
+              onClick={() =>
+                changeDestination({
+                  emails: currentSelected,
+                  destination:
+                    currentSelected[0]!.folder === "archive"
+                      ? "inbox"
+                      : "archive",
+                })
+              }
+            >
+              <Image src="/trash.svg" width={17} height={19} alt="Trash Icon" />
+              <p>
+                {currentSelected[0]!.folder === "archive"
+                  ? "Unarchive (u)"
+                  : "Archive (a)"}
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
       <ul
         style={{
           borderTop: "1px solid #E5E7EB",
@@ -37,7 +142,11 @@ export const EmailList = ({ folder }: { folder: EmailFolder }) => {
               }}
               key={email.id}
             >
-              <EmailItem email={email} />
+              <EmailItem
+                email={email}
+                currentSelected={currentSelected}
+                setCurrentSelected={setCurrentSelected}
+              />
             </li>
           ))}
       </ul>
