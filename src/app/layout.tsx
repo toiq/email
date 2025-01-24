@@ -36,7 +36,9 @@ export default function RootLayout({
         <Sidebar />
         <div>
           <PageTitle />
-          <EmailContextProvider>{children}</EmailContextProvider>
+          <EmailContextProvider>
+            <div>{children}</div>
+          </EmailContextProvider>
         </div>
       </body>
     </html>

@@ -1,13 +1,16 @@
-"use client";
-import { EmailContext } from "@/contexts/email-context";
-import { useContext } from "react";
+import { EmailList } from "@/features/email-list/email-list";
 
 const IndexPage = () => {
-  const { emailData } = useContext(EmailContext);
-
-  console.log({ emailData });
-
-  return <div>IndexPage</div>;
+  return (
+    <div
+      style={{
+        width: "100vw",
+        display: "flex",
+      }}
+    >
+      <EmailList />
+    </div>
+  );
 };
 
 export default IndexPage;
