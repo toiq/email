@@ -4,6 +4,7 @@ import "./globals.css";
 import { Sidebar } from "@/features/sidebar/sidebar";
 import { PageTitle } from "@/components/page-title";
 import { EmailContextProvider } from "@/contexts/email-context";
+import { Modal } from "@/components/modal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable}`}
         style={{
           display: "flex",
+          position: "relative",
         }}
       >
         <Sidebar />
@@ -38,6 +40,7 @@ export default function RootLayout({
           <PageTitle />
           <EmailContextProvider>
             <div>{children}</div>
+            <Modal />
           </EmailContextProvider>
         </div>
       </body>

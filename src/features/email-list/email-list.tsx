@@ -3,8 +3,9 @@
 import { EmailContext } from "@/contexts/email-context";
 import { useContext } from "react";
 import { EmailItem } from "./email-item";
+import { EmailFolder } from "@/types/email.type";
 
-export const EmailList = () => {
+export const EmailList = ({ folder }: { folder: EmailFolder }) => {
   const { emailData } = useContext(EmailContext);
   return (
     <div
@@ -19,19 +20,21 @@ export const EmailList = () => {
           width: "100%",
         }}
       >
-        {emailData?.map((email) => (
-          <li
-            style={{
-              listStyleType: "none",
-              padding: "20px 24px 20px 24px",
-              borderBottom: "1px solid #E5E7EB",
-              width: "100%",
-            }}
-            key={email.id}
-          >
-            <EmailItem email={email} />
-          </li>
-        ))}
+        {emailData
+          ?.filter((email) => email.folder === folder)
+          .map((email) => (
+            <li
+              style={{
+                listStyleType: "none",
+                padding: "20px 24px 20px 24px",
+                borderBottom: "1px solid #E5E7EB",
+                width: "100%",
+              }}
+              key={email.id}
+            >
+              <EmailItem email={email} />
+            </li>
+          ))}
       </ul>
     </div>
   );

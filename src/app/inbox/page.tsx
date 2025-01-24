@@ -8,7 +8,7 @@ const IndexPage = () => {
         display: "flex",
       }}
     >
-      <EmailList />
+      <EmailList folder="inbox" />
     </div>
   );
 };
