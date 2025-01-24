@@ -1,6 +1,7 @@
 "use client";
 import { EmailContext } from "@/contexts/email-context";
 import { useChangeFolder } from "@/hooks/use-change-folder";
+import { useChangeRead } from "@/hooks/use-change-read";
 import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
 
@@ -8,6 +9,7 @@ export const Modal = () => {
   const { selectedEmail, setSelectedEmail } = useContext(EmailContext);
   const [isOpen, setIsOpen] = useState(!!selectedEmail);
   const changeDestination = useChangeFolder();
+  const changeStatus = useChangeRead();
 
   const closeModal = () => {
     setIsOpen(false);
@@ -75,6 +77,12 @@ export const Modal = () => {
             }}
           >
             <div
+              onClick={() =>
+                changeStatus({
+                  emails: [selectedEmail!],
+                  status: !selectedEmail!.isRead,
+                })
+              }
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -98,12 +106,17 @@ export const Modal = () => {
               onClick={() =>
                 changeDestination({
                   emails: [selectedEmail!],
-                  destination: "archive",
+                  destination:
+                    selectedEmail!.folder === "archive" ? "inbox" : "archive",
                 })
               }
             >
               <Image src="/trash.svg" width={17} height={19} alt="Trash Icon" />
-              <p>Archive (a)</p>
+              <p>
+                {selectedEmail!.folder === "archive"
+                  ? "Unarchive (u)"
+                  : "Archive (a)"}
+              </p>
             </div>
           </div>
         </div>

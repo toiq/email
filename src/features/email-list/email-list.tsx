@@ -32,6 +32,8 @@ export const EmailList = ({ folder }: { folder: EmailFolder }) => {
                 padding: "20px 24px 20px 24px",
                 borderBottom: "1px solid #E5E7EB",
                 width: "100%",
+                background: "white",
+                opacity: email.isRead ? 0.5 : 1,
               }}
               key={email.id}
             >
